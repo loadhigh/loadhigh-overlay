@@ -1,0 +1,15 @@
+DEFINED_PHASES=compile install postinst postrm preinst prepare setup test unpack
+DEPEND=!build? ( sys-apps/sed >=sys-devel/binutils-2.11.90.0.31 ) >=dev-vcs/git-1.8.2.1[curl]
+DESCRIPTION=The source for the Linux kernel used in Windows Subsystem for Linux 2 (WSL2) for the 4.19 kernel tree
+EAPI=6
+HOMEPAGE=https://github.com/microsoft/WSL2-Linux-Kernel
+IUSE=experimental symlink build
+KEYWORDS=amd64 arm64
+LICENSE=GPL-2
+PROPERTIES=live
+RDEPEND=!build? ( dev-lang/perl sys-devel/bc sys-devel/bison sys-devel/flex sys-devel/make >=sys-libs/ncurses-5.2 virtual/libelf )
+RESTRICT=binchecks strip
+SLOT=4.19.121
+SRC_URI=experimental? ( https://dev.gentoo.org/~alicef/dist/genpatches/genpatches-4.19-120.experimental.tar.xz https://dev.gentoo.org/~mpagano/dist/genpatches/genpatches-4.19-120.experimental.tar.xz https://dev.gentoo.org/~whissi/dist/genpatches/genpatches-4.19-120.experimental.tar.xz )
+_eclasses_=eapi7-ver	f9ec87e93172b25ce65a85303dc06964	estack	686eaab303305a908fd57b2fd7617800	git-r3	86a0188f2ad9eb3d65e4d031ab8a0422	kernel-2	75c031f59bce156dbdbfb3b42d1c9974	multilib	0914eab919f4f11dd9e0407b92af4726	toolchain-funcs	d3e75048a89c0445838d2f44e5c65d97
+_md5_=53cc984d7321a4a240546c4159202d1b
