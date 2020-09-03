@@ -14,7 +14,7 @@ KEYWORDS="~amd64 ~arm64"
 HOMEPAGE="https://github.com/microsoft/WSL2-Linux-Kernel"
 IUSE="experimental"
 
-DESCRIPTION="The source for the Linux kernel used in Windows Subsystem for Linux 2 (WSL2) for the ${KV_MAJOR}.${KV_MINOR} kernel tree"
+DESCRIPTION="Linux kernel used WSL2 for the ${KV_MAJOR}.${KV_MINOR} kernel tree with genpatches"
 
 KERNEL_URI="https://github.com/microsoft/WSL2-Linux-Kernel/archive/linux-msft-${OKV}.tar.gz"
 SRC_URI="${KERNEL_URI} ${GENPATCHES_URI}"
