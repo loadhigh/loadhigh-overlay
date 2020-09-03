@@ -23,7 +23,7 @@ DESCRIPTION="Prebuilt Java JDK binaries provided by SapMachine"
 HOMEPAGE="https://sap.github.io/SapMachine/"
 LICENSE="GPL-2-with-classpath-exception"
 KEYWORDS="~amd64 ~ppc64"
-IUSE="alsa cups doc +gentoo-vm headless-awt nsplugin selinux source webstart"
+IUSE="alsa cups doc +gentoo-vm headless-awt selinux source"
 
 RDEPEND="
 	media-libs/fontconfig:1.0
@@ -42,9 +42,6 @@ RDEPEND="
 		x11-libs/libXrender
 		x11-libs/libXtst
 	)"
-
-PDEPEND="webstart? ( >=dev-java/icedtea-web-1.6.1:0 )
-	nsplugin? ( >=dev-java/icedtea-web-1.6.1:0[nsplugin] )"
 
 RESTRICT="preserve-libs splitdebug"
 QA_PREBUILT="*"

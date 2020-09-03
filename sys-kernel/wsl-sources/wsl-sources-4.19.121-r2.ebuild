@@ -10,7 +10,6 @@ inherit kernel-2
 detect_version
 detect_arch
 
-
 KEYWORDS="amd64 arm64"
 HOMEPAGE="https://github.com/microsoft/WSL2-Linux-Kernel"
 IUSE="experimental"
@@ -21,16 +20,16 @@ KERNEL_URI="https://github.com/microsoft/WSL2-Linux-Kernel/archive/${PV}-microso
 SRC_URI="${KERNEL_URI} ${GENPATCHES_URI}"
 
 universal_unpack() {
-        mkdir -p ${WORKDIR}/linux-${KV_FULL}
-        tar xf ${DISTDIR}/${OKV}-microsoft-standard.tar.gz -C ${WORKDIR}/linux-${KV_FULL} --strip-components=1
-        cd "${S}"
+	mkdir -p "${WORKDIR}/linux-${KV_FULL}"
+	tar xf "${DISTDIR}/${OKV}-microsoft-standard.tar.gz" -C "${WORKDIR}/linux-${KV_FULL}" --strip-components=1
+	cd "${S}"
 }
 
 src_install() {
 	kernel-2_src_install
-	insinto /usr/src/linux-${KV_FULL}/Microsoft
-	newins "${FILESDIR}"/config-hv-${OKV}.gz config-hv.gz
-	gunzip ${D}/usr/src/linux-${KV_FULL}/Microsoft/config-hv.gz || die
+	insinto "/usr/src/linux-${KV_FULL}/Microsoft"
+	newins "${FILESDIR}/config-hv-${OKV}.gz" config-hv.gz
+	gunzip "${D}/usr/src/linux-${KV_FULL}/Microsoft/config-hv.gz" || die
 }
 
 pkg_postinst() {
