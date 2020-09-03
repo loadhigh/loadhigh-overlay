@@ -29,7 +29,8 @@ universal_unpack() {
 src_install() {
 	kernel-2_src_install
 	insinto /usr/src/linux-${KV_FULL}/Microsoft
-	newins "${FILESDIR}"/config-hv-${OKV} config-hv
+	newins "${FILESDIR}"/config-hv-${OKV}.gz config-hv.gz
+	gunzip ${D}/usr/src/linux-${KV_FULL}/Microsoft/config-hv.gz || die
 }
 
 pkg_postinst() {
