@@ -1,0 +1,10 @@
+[Unit]
+Description=Hyper-V VSS Protocol Daemon
+ConditionVirtualization=microsoft
+
+[Service]
+ExecStart=/usr/sbin/hv_vss_daemon -n
+
+[Install]
+WantedBy=multi-user.target
+
