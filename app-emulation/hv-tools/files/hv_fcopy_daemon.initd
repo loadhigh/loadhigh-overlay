@@ -1,0 +1,7 @@
+#!/sbin/openrc-run
+
+command=/usr/sbin/hv_fcopy_daemon
+command_args="-n"
+
+name="hv_fcopy_daemon"
+description="Hyper-V File Copy Protocol Daemon"
