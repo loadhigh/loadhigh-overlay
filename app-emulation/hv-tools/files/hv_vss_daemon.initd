@@ -1,0 +1,7 @@
+#!/sbin/openrc-run
+
+command=/usr/sbin/hv_vss_daemon
+command_args="-n"
+
+name="hv_vss_daemon"
+description="Hyper-V VSS Protocol Daemon"

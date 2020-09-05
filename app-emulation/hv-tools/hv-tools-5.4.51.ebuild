@@ -18,6 +18,10 @@ KEYWORDS="~amd64 ~arm64"
 src_install() {
 	emake DESTDIR="${D}" install
 
+	newinitd "${FILESDIR}"/hv_fcopy_daemon.initd hv_fcopy_daemon
+	newinitd "${FILESDIR}"/hv_kvp_daemon.initd hv_kvp_daemon
+	newinitd "${FILESDIR}"/hv_vss_daemon.initd hv_vss_daemon
+
 	systemd_dounit "${FILESDIR}"/hv_fcopy_daemon.service
 	systemd_dounit "${FILESDIR}"/hv_kvp_daemon.service
 	systemd_dounit "${FILESDIR}"/hv_vss_daemon.service

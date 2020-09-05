@@ -1,0 +1,7 @@
+#!/sbin/openrc-run
+
+command=/usr/sbin/hv_kvp_daemon
+command_args="-n"
+
+name="hv_kvp_daemon"
+description="Hyper-V KVP Protocol Daemon"
