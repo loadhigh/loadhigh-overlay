@@ -12,6 +12,7 @@ SLOT="0"
 KEYWORDS="amd64 arm64"
 
 PATCHES=(
+	"${FILESDIR}/${P}-gentoo.patch"
 	"${FILESDIR}/${P}.patch"
 )
 
