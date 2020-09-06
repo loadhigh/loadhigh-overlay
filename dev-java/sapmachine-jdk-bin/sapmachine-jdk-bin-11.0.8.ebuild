@@ -63,11 +63,11 @@ src_install() {
 	# also has an explicit dependency while Oracle seemingly dlopens it.
 	rm -vf lib/libfreetype.so || die
 
-	if use headless-awt ; then
+	if use headless-awt; then
 		rm -v lib/lib*{[jx]awt,splashscreen}* || die
 	fi
 
-	if ! use source ; then
+	if ! use source; then
 		rm -v lib/src.zip || die
 	fi
 
@@ -90,7 +90,7 @@ src_install() {
 pkg_postinst() {
 	java-vm-2_pkg_postinst
 
-	if use gentoo-vm ; then
+	if use gentoo-vm; then
 		ewarn "WARNING! You have enabled the gentoo-vm USE flag, making this JDK"
 		ewarn "recognised by the system. This will almost certainly break"
 		ewarn "many java ebuilds as they are not ready for openjdk-11"
