@@ -9,4 +9,13 @@ SRC_URI="https://github.com/wslutilities/${PN}/archive/v${PV}.tar.gz -> ${P}.tar
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="amd64 arm64"
+KEYWORDS="~amd64 ~arm64"
+
+PATCHES=(
+	"${FILESDIR}/${P}.patch"
+)
+
+src_install() {
+	docompress -x /usr/share/man
+	default
+}
