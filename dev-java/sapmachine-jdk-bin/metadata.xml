@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-    <maintainer type="person">
-        <email>loadhigh@users.noreply.github.com</email>
-        <name>loadhigh</name>
-    </maintainer>
-    <longdescription>
-        This project contains a downstream version of the OpenJDK project. It is used to build and maintain a SAP
-        supported version of OpenJDK for SAP customers and partners who wish to use OpenJDK to run their applications.
-    </longdescription>
-    <use>
-        <flag name="headless-awt">Don't install the X backend for AWT, needed by some GUIs (used to be X flag)</flag>
-        <flag name="gentoo-vm">Allow this JDK to be recognised by Gentoo (package manager, eselect, java-config,
-            EXPERIMENTAL!)
-        </flag>
-        <flag name="source">Install JVM sources</flag>
-    </use>
+  <maintainer type="person">
+    <email>loadhigh@users.noreply.github.com</email>
+    <name>loadhigh</name>
+  </maintainer>
+  <longdescription>
+    This project contains a downstream version of the OpenJDK project. It is used to build and maintain a SAP
+    supported version of OpenJDK for SAP customers and partners who wish to use OpenJDK to run their applications.
+  </longdescription>
+  <use>
+    <flag name="headless-awt">Don't install the X backend for AWT, needed by some GUIs (used to be X flag)</flag>
+    <flag name="gentoo-vm">Allow this JDK to be recognised by Gentoo (package manager, eselect, java-config,
+      EXPERIMENTAL!)
+    </flag>
+    <flag name="source">Install JVM sources</flag>
+  </use>
 </pkgmetadata>
