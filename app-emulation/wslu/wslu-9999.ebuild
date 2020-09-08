@@ -15,6 +15,10 @@ else
 	KEYWORDS="~amd64 ~arm64"
 fi
 
+PATCHES=(
+	"${FILESDIR}/${P}.patch"
+)
+
 RDEPEND="
 	sys-devel/bc
 	media-gfx/imagemagick
