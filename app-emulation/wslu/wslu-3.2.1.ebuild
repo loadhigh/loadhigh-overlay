@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit desktop
+inherit desktop xdg-utils
 
 DESCRIPTION="A collection of utilities for Windows 10 Linux Subsystems"
 HOMEPAGE="https://github.com/wslutilities/wslu"
@@ -32,5 +32,14 @@ SLOT="0"
 src_install() {
 	docompress -x /usr/share/man
 	default
-	domenu ${D}/usr/share/wslu/wslview.desktop
+	date +"%s" | tee "${D}"/usr/share/wslu/updated_time >/dev/null
+	domenu "${D}"/usr/share/wslu/wslview.desktop
+}
+
+pkg_postrm() {
+	xdg_desktop_database_update
+}
+
+pkg_postinst() {
+	xdg_desktop_database_update
 }
