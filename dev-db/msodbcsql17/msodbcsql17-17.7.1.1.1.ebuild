@@ -50,9 +50,9 @@ src_install() {
 }
 
 pkg_postinst() {
-	odbcinst -i -f /opt/microsoft/msodbcsql17/etc/odbcinst.ini
+	odbcinst -i -d -f /opt/microsoft/msodbcsql17/etc/odbcinst.ini
 }
 
 pkg_prerm() {
-	odbcinst -u -f /opt/microsoft/msodbcsql17/etc/odbcinst.ini
+	odbcinst -u -d -n "ODBC Driver 17 for SQL Server"
 }
