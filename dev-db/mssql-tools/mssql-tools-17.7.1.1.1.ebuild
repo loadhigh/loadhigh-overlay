@@ -43,3 +43,8 @@ KEYWORDS="~amd64"
 
 RDEPEND=">=dev-db/unixODBC-2.3.9"
 
+src_install() {
+	cp -r opt usr ${ED}
+	dosym "../../opt/${PN}/bin/bcp" "/usr/bin/bcp"
+	dosym "../../opt/${PN}/bin/sqlcmd" "/usr/bin/sqlcmd"
+}
