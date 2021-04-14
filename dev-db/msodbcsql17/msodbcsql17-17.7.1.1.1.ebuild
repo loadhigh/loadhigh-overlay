@@ -42,7 +42,10 @@ S=${WORKDIR}
 
 KEYWORDS="~amd64"
 
-RDEPEND=">=dev-db/unixODBC-2.3.9"
+RDEPEND="
+	>=dev-db/unixODBC-2.3.9
+	app-crypt/mit-krb5
+"
 
 src_install() {
 	cp -r opt usr ${ED}
