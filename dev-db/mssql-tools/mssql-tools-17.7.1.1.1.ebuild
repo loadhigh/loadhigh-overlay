@@ -25,6 +25,7 @@ inherit rpm
 # Short one-line description of this package.
 DESCRIPTION="Install sqlcmd and bcp the SQL Server command-line tools on Linux."
 LICENSE="all-rights-reserved"
+RESTRICT="strip"
 
 # Homepage, not used by Portage directly but handy for developer reference
 HOMEPAGE="https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools?view=sql-server-ver15"
@@ -41,10 +42,14 @@ S=${WORKDIR}
 
 KEYWORDS="~amd64"
 
-RDEPEND=">=dev-db/unixODBC-2.3.9"
+RDEPEND="
+	>=dev-db/unixODBC-2.3.9 \
+	>=dev-db/msodbcsql17-${PV}
+"
 
 src_install() {
 	cp -r opt usr ${ED}
+	mv "${ED}/usr/share/doc/${PN}" "${ED}/usr/share/doc/${PN}-${PV}"
 	dosym "../../opt/${PN}/bin/bcp" "/usr/bin/bcp"
 	dosym "../../opt/${PN}/bin/sqlcmd" "/usr/bin/sqlcmd"
 }
