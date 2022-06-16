@@ -1,15 +1,15 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 inherit systemd
 
-MSV="${PV}.3"
+MSV="${PV}.1"
 
 DESCRIPTION="Hyper-V tools"
 HOMEPAGE="https://github.com/microsoft/WSL2-Linux-Kernel"
-SRC_URI="https://github.com/microsoft/WSL2-Linux-Kernel/archive/linux-msft-wsl-${MSV}.tar.gz"
+SRC_URI="https://github.com/microsoft/WSL2-Linux-Kernel/archive/linux-msft-wsl-${MSV}.tar.gz -> linux-msft-${PV}.tar.gz"
 S="${WORKDIR}/WSL2-Linux-Kernel-linux-msft-wsl-${MSV}/tools/hv"
 LICENSE="GPL-2"
 
