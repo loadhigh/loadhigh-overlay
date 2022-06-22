@@ -9,9 +9,7 @@
             <email>loadhigh@users.noreply.github.com</email>
             <name><![CDATA[loadhigh]]></name>
         </owner>
-        <source type="git">git://github.com/loadhigh/loadhigh-overlay.git</source>
         <source type="git">https://github.com/loadhigh/loadhigh-overlay.git</source>
-        <source type="git">git@github.com:loadhigh/loadhigh-overlay.git</source>
         <feed>https://github.com/loadhigh/loadhigh-overlay/commits/master.atom</feed>
     </repo>
 </repositories>
