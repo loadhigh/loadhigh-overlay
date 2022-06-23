@@ -1,0 +1,79 @@
+diff --git a/src/wslfetch.sh b/src/wslfetch.sh
+index b3e2434..b050590 100644
+--- a/src/wslfetch.sh
++++ b/src/wslfetch.sh
+@@ -294,6 +294,27 @@ case "$distro" in
+ 			"${white}                                                             ${reset}"
+ 			"${white}                                                             ${reset}"
+ 			"${white}                                                             ${reset}");;
++  'gentoo')
++    t="${purple}${bold}"
++      full_text=(
++      "${bold}${purple}            -/oyddmdhs+:.                ${reset}"
++      "${bold}${purple}        -o${white}dNMMMMMMMMNNmhy+${bold}${purple}-\`             ${reset}"
++      "${bold}${purple}      -y${white}NMMMMMMMMMMMNNNmmdhy${bold}${purple}+-           ${reset}"
++      "${bold}${purple}    \`o${white}mMMMMMMMMMMMMNmdmmmmddhhy${bold}${purple}/\`        ${reset}"
++      "${bold}${purple}    om${white}MMMMMMMMMMMN${bold}${purple}hhyyyo${white}hmdddhhhd${bold}${purple}o\`      ${reset}"
++      "${bold}${purple}   .y${white}dMMMMMMMMMMd${bold}${purple}hs++so/s${white}mdddhhhhdm${bold}${purple}+\`    ${reset}"
++      "${bold}${purple}    oy${white}hdmNMMMMMMMN${bold}${purple}dyooy${white}dmddddhhhhyhN${bold}${purple}d.   ${reset}"
++      "${bold}${purple}     :o${white}yhhdNNMMMMMMMNNNmmdddhhhhhyym${bold}${purple}Mh   ${reset}"
++      "${bold}${purple}       .:${white}+sydNMMMMMNNNmmmdddhhhhhhmM${bold}${purple}my   ${reset}"
++      "${bold}${purple}          /m${white}MMMMMMNNNmmmdddhhhhhmMNh${bold}${purple}s:   ${reset}"
++      "${bold}${purple}       \`o${white}NMMMMMMMNNNmmmddddhhdmMNhs${bold}${purple}+\`    ${reset}"
++      "${bold}${purple}     \`s${white}NMMMMMMMMNNNmmmdddddmNMmhs${bold}${purple}/.      ${reset}"
++      "${bold}${purple}    /N${white}MMMMMMMMNNNNmmmdddmNMNdso${bold}${purple}:\`        ${reset}"
++      "${bold}${purple}   +M${white}MMMMMMNNNNNmmmmdmNMNdso${bold}${purple}/-           ${reset}"
++      "${bold}${purple}   yM${white}MNNNNNNNmmmmmNNMmhs+/${bold}${purple}-\`             ${reset}"
++      "${bold}${purple}   /h${white}MMNNNNNNNNMNdhs++/${bold}${purple}-\`                ${reset}"
++      "${bold}${purple}   \`/${white}ohdmmddhys+++/:${bold}${purple}.\`                     ${reset}"
++      "${bold}${purple}     \`-//////:--.                        ${reset}");;
+ 	*)
+ 		t="${cyan}${bold}"
+ 		full_text=(
+diff --git a/src/wslsys.sh b/src/wslsys.sh
+index b4bc46d..4dcd000 100644
+--- a/src/wslsys.sh
++++ b/src/wslsys.sh
+@@ -97,6 +97,8 @@ case "$distro" in
+ 		packages=$(apk info | wc -l);;
+ 	'archlinux')
+ 		packages=$(pacman -Qq | wc -l);;
++  'gentoo')
++    packages=$(printf "%s\n" /var/db/pkg/*/*/ | wc -l);;
+ esac
+ 
+ ##  old version of fedora remix specific information
+diff --git a/src/wslu-header b/src/wslu-header
+index 4619b10..3051ba6 100644
+--- a/src/wslu-header
++++ b/src/wslu-header
+@@ -242,6 +242,7 @@ case $distro in
+ 	Scientific*) distro="scilinux";;
+ 	*Fedora\ Remix\ for\ WSL*) distro="fedoraremix";;
+ 	*Fedora*) distro="fedora";;
++  *Gentoo*) distro="gentoo";;
+ 	*Generic*) [ "fedora" == "$(grep -e "LIKE=" /etc/os-release | sed -e 's/ID_LIKE=//g')" ] && distro="oldfedora" || distro="unknown";;
+ 	*) distro="unknown";;
+ esac
+diff --git a/src/wslview.sh b/src/wslview.sh
+index 9668a4c..934bdd4 100644
+--- a/src/wslview.sh
++++ b/src/wslview.sh
+@@ -6,7 +6,7 @@ lname=""
+ help_short="$0 [-hvur]\n$0 LINK/FILE"
+ 
+ function del_reg_alt {
+-	if [ "$distro" == "archlinux" ] || [ "$distro" == "alpine" ]; then
++	if [ "$distro" == "archlinux" ] || [ "$distro" == "alpine" ] || [ "$distro" == "gentoo" ]; then
+ 		echo "${error} Unsupported action for this distro. Aborted. "
+ 		exit 34
+ 	else
+@@ -17,7 +17,7 @@ function del_reg_alt {
+ }
+ 
+ function add_reg_alt {
+-	if [ "$distro" == "archlinux" ] || [ "$distro" == "alpine" ]; then
++	if [ "$distro" == "archlinux" ] || [ "$distro" == "alpine" ] || [ "$distro" == "gentoo" ]; then
+ 		error_echo "Unsupported action for this distro. Aborted." 34
+ 	else
+ 		sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser "$(readlink -f "$0")" 30
