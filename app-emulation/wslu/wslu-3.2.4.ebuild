@@ -14,7 +14,12 @@ if [[ "${PV}" == *9999 ]]; then
 	EGIT_BRANCH="dev/master"
 else
 	SRC_URI="https://github.com/wslutilities/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="amd64 arm64"
 fi
+
+PATCHES=(
+	"${FILESDIR}/${P}-gentoo.patch"
+)
 
 RDEPEND="
 	sys-devel/bc
