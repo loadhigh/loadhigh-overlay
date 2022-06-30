@@ -1,7 +1,7 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 
 inherit java-vm-2 toolchain-funcs
 
@@ -23,17 +23,19 @@ DESCRIPTION="Prebuilt Java JDK binaries provided by SapMachine"
 HOMEPAGE="https://sap.github.io/SapMachine/"
 LICENSE="GPL-2-with-classpath-exception"
 KEYWORDS="~amd64 ~ppc64"
-IUSE="alsa cups doc +gentoo-vm headless-awt selinux source"
+IUSE="alsa cups gentoo-vm headless-awt selinux source"
 
 RDEPEND="
+	>=sys-apps/baselayout-java-0.1.0-r1
+	kernel_linux? (
 	media-libs/fontconfig:1.0
 	media-libs/freetype:2
-	>=sys-apps/baselayout-java-0.1.0-r1
-	>=sys-libs/glibc-2.2.5:*
+	media-libs/harfbuzz
+	elibc_glibc? ( >=sys-libs/glibc-2.2.5:* )
+	elibc_musl? ( sys-libs/musl )
 	sys-libs/zlib
 	alsa? ( media-libs/alsa-lib )
 	cups? ( net-print/cups )
-	doc? ( dev-java/java-sdk-docs:${SLOT} )
 	selinux? ( sec-policy/selinux-java )
 	!headless-awt? (
 		x11-libs/libX11
@@ -41,6 +43,7 @@ RDEPEND="
 		x11-libs/libXi
 		x11-libs/libXrender
 		x11-libs/libXtst
+		)
 	)"
 
 RESTRICT="preserve-libs splitdebug"
@@ -63,6 +66,15 @@ src_install() {
 	# also has an explicit dependency while Oracle seemingly dlopens it.
 	rm -vf lib/libfreetype.so || die
 
+		# prefer system copy # https://bugs.gentoo.org/776676
+		rm -vf lib/libharfbuzz.so || die
+
+		# Oracle and IcedTea have libjsoundalsa.so depending on
+		# libasound.so.2 but AdoptOpenJDK only has libjsound.so. Weird.
+		if ! use alsa ; then
+			rm -v lib/libjsound.* || die
+		fi
+
 	if use headless-awt; then
 		rm -v lib/lib*{[jx]awt,splashscreen}* || die
 	fi
@@ -72,8 +84,7 @@ src_install() {
 	fi
 
 	rm -v lib/security/cacerts || die
-	dosym ../../../../etc/ssl/certs/java/cacerts \
-		"${dest}"/lib/security/cacerts
+	dosym -r /etc/ssl/certs/java/cacerts "${dest}"/lib/security/cacerts
 
 	dodir "${dest}"
 	cp -pPR * "${ddest}" || die
@@ -81,7 +92,7 @@ src_install() {
 	# provide stable symlink
 	dosym "${P}" "/opt/${PN}-${SLOT}"
 
-	use gentoo-vm && java-vm_install-env "${FILESDIR}"/${PN}-${SLOT}.env.sh
+	java-vm_install-env "${FILESDIR}"/${PN}-${SLOT}.env.sh
 	java-vm_set-pax-markings "${ddest}"
 	java-vm_revdep-mask
 	java-vm_sandbox-predict /dev/random /proc/self/coredump_filter
