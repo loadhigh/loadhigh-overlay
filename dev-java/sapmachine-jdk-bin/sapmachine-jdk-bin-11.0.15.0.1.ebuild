@@ -22,7 +22,7 @@ SRC_URI="
 DESCRIPTION="Prebuilt Java JDK binaries provided by SapMachine"
 HOMEPAGE="https://sap.github.io/SapMachine/"
 LICENSE="GPL-2-with-classpath-exception"
-KEYWORDS="~amd64 ~ppc64"
+KEYWORDS="amd64 ~ppc64"
 IUSE="alsa cups gentoo-vm headless-awt selinux source"
 
 RDEPEND="
