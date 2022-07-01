@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>loadhigh@users.noreply.github.com</email>
+    <name>loadhigh</name>
+  </maintainer>
+  <longdescription>
+    Tool to start systemd in its own namespace with WSL2 Interop fixes
+  </longdescription>
+</pkgmetadata>
