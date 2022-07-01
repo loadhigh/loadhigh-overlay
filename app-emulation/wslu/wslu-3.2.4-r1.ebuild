@@ -24,13 +24,6 @@ PATCHES=(
 RDEPEND="
 	sys-devel/bc
 	media-gfx/imagemagick
-	app-admin/sudo
-	systemd? (
-	    sys-apps/systemd
-		sys-apps/daemonize
-		sys-apps/util-linux
-		sys-apps/findutils
-	)
 "
 
 LICENSE="GPL-3"
@@ -42,19 +35,6 @@ src_install() {
 	default
 	date +"%s" | tee "${D}"/usr/share/wslu/updated_time >/dev/null
 	domenu "${D}"/usr/share/wslu/wslview.desktop
-
-	if use systemd; then
-		exeinto "/usr/bin"
-		doexe "${FILESDIR}/enter-systemd-namespace"
-		insinto /etc/systemd/system/systemd-binfmt.service.d
-		newins "${FILESDIR}/systemd-binfmt.service.conf" wslu.conf
-		insinto /etc/bash/bashrc.d
-		newins "${FILESDIR}/wslu.bashrc.sh" wslu.sh
-	fi
-
-	insinto /etc/sudoers.d
-	insopts -m440
-	newins "${FILESDIR}/wslu.sudoers" wslu
 }
 
 pkg_postrm() {
