@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="Tool to start systemd in its own namespace with WSL2 Interop fixes"
 HOMEPAGE="https://github.com/wslutilities/wslu"
 
-KEYWORDS="~amd64"
+KEYWORDS="amd64"
 
 
 RDEPEND="
