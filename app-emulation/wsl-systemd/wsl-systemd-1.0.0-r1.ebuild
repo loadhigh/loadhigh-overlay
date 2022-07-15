@@ -6,7 +6,7 @@ EAPI=8
 DESCRIPTION="Tool to start systemd in its own namespace with WSL2 Interop fixes"
 HOMEPAGE="https://github.com/wslutilities/wslu"
 
-KEYWORDS="amd64"
+KEYWORDS="~amd64"
 
 
 RDEPEND="
@@ -27,6 +27,8 @@ src_install() {
 	doexe "${FILESDIR}/wsl-systemd"
 	insinto /etc/systemd/system/systemd-binfmt.service.d
 	newins "${FILESDIR}/systemd-binfmt.service.conf" wsl-systemd.conf
+	insinto /etc/binfmt.d
+	newins "${FILESDIR}/wsl-systemd.binfmt" wsl-systemd
 	insinto /etc/bash/bashrc.d
 	newins "${FILESDIR}/wsl-systemd.bashrc.sh" wsl-systemd.sh
 	insinto /etc/sudoers.d
