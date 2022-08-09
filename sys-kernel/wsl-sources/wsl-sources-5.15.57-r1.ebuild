@@ -12,7 +12,7 @@ detect_arch
 
 MSV="${OKV}.1"
 
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 HOMEPAGE="https://github.com/microsoft/WSL2-Linux-Kernel"
 IUSE="experimental"
 
