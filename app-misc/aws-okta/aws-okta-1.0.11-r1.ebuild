@@ -4,6 +4,7 @@
 EAPI=7
 
 inherit git-r3
+inherit bash-completion-r1
 
 DESCRIPTION="aws-okta allows you to authenticate with AWS using your Okta credentials."
 HOMEPAGE="https://github.com/segmentio/aws-okta"
@@ -22,8 +23,10 @@ DEPEND="
 
 src_compile() {
 	emake "dist/aws-okta-v${PV}-linux-amd64"
+	${S}/dist/aws-okta-v${PV}-linux-amd64 completion bash > ${S}/dist/${PN}.bash-completion
 }
 
 src_install() {
 	newbin "dist/aws-okta-v${PV}-linux-amd64" aws-okta
+	newbashcomp dist/${PN}.bash-completion ${PN}
 }
