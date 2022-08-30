@@ -23,9 +23,7 @@ SLOT="0"
 S=${WORKDIR}
 
 src_install() {
-	dosym /dev/null /etc/systemd/system/systemrun-user.mount
 	dosym /dev/null /etc/systemd/system/systemtmp.mount
-	dosym /dev/null /etc/systemd/system/systemuser-runtime-dir@.service
 	exeinto "/usr/bin"
 	doexe "${FILESDIR}/wsl-systemd"
 	insinto /etc/systemd/system/systemd-binfmt.service.d
