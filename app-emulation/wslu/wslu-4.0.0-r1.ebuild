@@ -26,6 +26,11 @@ LICENSE="GPL-3"
 SLOT="0"
 IUSE="systemd"
 
+src_prepare() {
+	default
+	sed -i -e "s/properfile_full_path:-lname/properfile_full_path:-\$lname/" src/wslview.sh || die "Sed failed!"
+}
+
 src_install() {
 	docompress -x /usr/share/man
 	default
