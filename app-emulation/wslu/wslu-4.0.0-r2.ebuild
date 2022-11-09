@@ -29,6 +29,7 @@ IUSE="systemd"
 src_prepare() {
 	default
 	sed -i -e "s/properfile_full_path:-lname/properfile_full_path:-\$lname/" src/wslview.sh || die "Sed failed!"
+	sed -i -e 's/{cmd}/\{cmd\/**\/$lname\}/g' src/wslview.sh || die "Sed failed!"
 }
 
 src_install() {
