@@ -24,7 +24,6 @@ RDEPEND="
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="systemd"
 
 src_prepare() {
 	default
