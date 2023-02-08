@@ -12,5 +12,6 @@
   </use>
   <upstream>
     <remote-id type="cpe">cpe:/o:linux:linux_kernel</remote-id>
+    <remote-id type="github">microsoft/WSL2-Linux-Kernel</remote-id>
   </upstream>
 </pkgmetadata>
