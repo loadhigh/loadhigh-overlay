@@ -8,4 +8,7 @@
   <longdescription>
     A collection of utilities for Windows 10 Linux Subsystems
   </longdescription>
+  <upstream>
+    <remote-id type="github">wslutilities/wslu</remote-id>
+  </upstream>
 </pkgmetadata>
