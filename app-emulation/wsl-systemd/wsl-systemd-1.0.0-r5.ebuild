@@ -26,18 +26,8 @@ src_install() {
 	# equivalent to "systemctl mask tmp.mount"
 	dosym /dev/null /etc/systemd/system/tmp.mount
 
-	dosym /dev/null /etc/systemd/system/systemd-binfmt.service
-
 	exeinto "/usr/bin"
 	doexe "${FILESDIR}/wsl-systemd"
-
-	# WSL only supports interop using mount command
-	insinto /etc/systemd/system/systemd-binfmt.service.d
-	newins "${FILESDIR}/systemd-binfmt.service.conf" wsl-systemd.conf
-
-	# Dummy file because systemd-binfmt.serivce will be skipped otherwise
-	insinto /etc/binfmt.d
-	newins "${FILESDIR}/wsl-systemd.binfmt" wsl-systemd
 
 	insinto /etc/bash/bashrc.d
 	newins "${FILESDIR}/wsl-systemd.bashrc.sh" wsl-systemd.sh
