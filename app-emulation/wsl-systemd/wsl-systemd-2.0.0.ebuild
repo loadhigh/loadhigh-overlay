@@ -3,21 +3,15 @@
 
 EAPI=8
 
-DESCRIPTION="Tool to start systemd in its own namespace with WSL2 Interop fixes"
+DESCRIPTION="Misc. workarounds for running systemd in WSL2"
 HOMEPAGE="https://github.com/wslutilities/wslu"
 
-KEYWORDS="amd64"
+KEYWORDS="amd64 arm64"
 
 
-RDEPEND="
-	  sys-apps/systemd
-		sys-apps/daemonize
-		sys-apps/util-linux
-		sys-apps/findutils
-		app-admin/sudo
-"
+RDEPEND=""
 
-LICENSE="GPL-3"
+LICENSE="MIT"
 SLOT="0"
 
 S=${WORKDIR}
@@ -28,9 +22,6 @@ src_install() {
 
 	# equivalent to "systemctl mask systemd-binfmt.service"
 	dosym /dev/null /etc/systemd/system/systemd-binfmt.service
-
-	exeinto "/usr/bin"
-	doexe "${FILESDIR}/wsl-systemd"
 
 	insinto /etc/bash/bashrc.d
 	newins "${FILESDIR}/wsl-systemd.bashrc.sh" wsl-systemd.sh

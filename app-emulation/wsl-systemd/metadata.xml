@@ -6,6 +6,6 @@
     <name>loadhigh</name>
   </maintainer>
   <longdescription>
-    Tool to start systemd in its own namespace with WSL2 Interop fixes
+    Misc. workarounds for running systemd in WSL2
   </longdescription>
 </pkgmetadata>
