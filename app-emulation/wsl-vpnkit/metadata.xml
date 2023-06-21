@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>loadhigh@users.noreply.github.com</email>
+    <name>loadhigh</name>
+  </maintainer>
+  <longdescription>
+    Provides network connectivity to WSL 2 when blocked by VPN
+  </longdescription>
+  <upstream>
+    <remote-id type="github">sakai135/wsl-vpnkit</remote-id>
+  </upstream>
+</pkgmetadata>
