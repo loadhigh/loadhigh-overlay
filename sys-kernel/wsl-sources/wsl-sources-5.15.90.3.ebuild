@@ -4,7 +4,7 @@
 EAPI="7"
 ETYPE="sources"
 K_WANT_GENPATCHES="extras experimental"
-K_GENPATCHES_VER="25"
+K_GENPATCHES_VER="94"
 
 inherit kernel-2
 detect_version
@@ -12,7 +12,7 @@ detect_arch
 
 MSV="${CKV}"
 
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 arm64"
 HOMEPAGE="https://github.com/microsoft/WSL2-Linux-Kernel"
 IUSE="experimental"
 
