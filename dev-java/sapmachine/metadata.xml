@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>loadhigh@users.noreply.github.com</email>
+    <name>loadhigh</name>
+  </maintainer>
+	<longdescription>
+    This project contains a downstream version of the OpenJDK project.
+    It is used to build and maintain a SAP supported version of OpenJDK for SAP customers and partners who wish to use OpenJDK to run their applications.
+	</longdescription>
+	<slots>
+		<slot name="11">Java™ version 11</slot>
+		<slot name="17">Java™ version 17</slot>
+    <slot name="21">Java™ version 21</slot>
+	</slots>
+	<use>
+		<flag name="headless-awt">Don't install the X backend for AWT, needed by some GUIs</flag>
+		<flag name="javafx" restrict="&gt;=dev-java/sapmachine-11">Import OpenJFX modules at build time, via <pkg>dev-java/openjfx</pkg></flag>
+		<flag name="jbootstrap">Build OpenJDK twice, the second time using the result of the first</flag>
+		<flag name="lto">Enable Link Time Optimization (LTO)</flag>
+		<flag name="source">Install JVM sources</flag>
+		<flag name="system-bootstrap">Bootstrap using installed openjdk</flag>
+		<flag name="systemtap" restrict="&gt;=dev-java/sapmachine-11">Enable SystemTAP/DTrace tracing</flag>
+	</use>
+	<upstream>
+		<remote-id type="github">SAP/SapMachine</remote-id>
+	</upstream>
+</pkgmetadata>
