@@ -210,6 +210,14 @@ src_configure() {
 		--with-libjpeg="${XPAK_BOOTSTRAP:-system}"
 		--with-libpng="${XPAK_BOOTSTRAP:-system}"
 		--with-native-debug-symbols=$(usex debug internal none)
+		--with-vendor-name="Gentoo"
+		--with-vendor-url="https://gentoo.org"
+		--with-vendor-bug-url="https://bugs.gentoo.org"
+		--with-vendor-vm-bug-url="https://bugs.openjdk.java.net"
+		--with-vendor-version-string="${PVR}"
+		--with-version-pre=""
+		--with-version-string="${PV%_p*}"
+		--with-version-build=""
 		--with-zlib="${XPAK_BOOTSTRAP:-system}"
 		--enable-jvm-feature-dtrace=$(usex systemtap yes no)
 		--enable-headless-only=$(usex headless-awt yes no)
