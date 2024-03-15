@@ -3,8 +3,8 @@
 
 EAPI="7"
 ETYPE="sources"
-K_WANT_GENPATCHES="extras experimental"
-K_GENPATCHES_VER="139"
+K_WANT_GENPATCHES="extras"
+K_GENPATCHES_VER="159"
 K_NOSETEXTRAVERSION=1
 
 inherit kernel-2
