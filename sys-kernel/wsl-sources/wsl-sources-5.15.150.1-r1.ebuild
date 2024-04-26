@@ -3,8 +3,10 @@
 
 EAPI="7"
 ETYPE="sources"
+RESTRICT="mirror fetch"
+
 K_WANT_GENPATCHES="extras"
-K_GENPATCHES_VER="159"
+K_GENPATCHES_VER="160"
 K_NOSETEXTRAVERSION=1
 
 inherit kernel-2
