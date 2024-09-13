@@ -16,6 +16,7 @@ else
 	SRC_URI="https://github.com/wslutilities/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="amd64"
 fi
+RESTRICT="mirror"
 
 RDEPEND="
 	sys-devel/bc
@@ -24,6 +25,7 @@ RDEPEND="
 
 LICENSE="GPL-3"
 SLOT="0"
+
 
 src_prepare() {
 	default
