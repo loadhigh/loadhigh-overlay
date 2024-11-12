@@ -17,9 +17,6 @@
   </slots>
   <use>
     <flag name="headless-awt">Don't install the X backend for AWT, needed by some GUIs</flag>
-    <flag name="javafx" restrict="&gt;=dev-java/sapmachine-11">Import OpenJFX modules at build time, via
-      <pkg>dev-java/openjfx</pkg>
-    </flag>
     <flag name="jbootstrap">Build OpenJDK twice, the second time using the result of the first</flag>
     <flag name="lto">Enable Link Time Optimization (LTO)</flag>
     <flag name="source">Install JVM sources</flag>

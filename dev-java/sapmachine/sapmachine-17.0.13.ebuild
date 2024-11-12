@@ -11,7 +11,6 @@ PPC64_XPAK="17.0.1_p12" # big-endian bootstrap tarball
 RISCV_XPAK="17.0.3_p7"
 X86_XPAK="17.0.1_p12"
 
-
 # Usage: bootstrap_uri <keyword> <version> [extracond]
 # Example: $(bootstrap_uri ppc64 17.0.1_p12 big-endian)
 # Output: ppc64? ( big-endian? ( https://...17.0.1_p12-ppc64.tar.xz ) )
@@ -52,11 +51,10 @@ S="${WORKDIR}/SapMachine-sapmachine-${MY_PV//+/-}"
 LICENSE="GPL-2-with-classpath-exception"
 SLOT="${MY_PV%%[.+]*}"
 KEYWORDS="amd64 arm64"
-IUSE="alsa big-endian cups debug doc examples headless-awt javafx +jbootstrap lto selinux source system-bootstrap systemtap"
+IUSE="alsa big-endian cups debug doc examples headless-awt +jbootstrap lto selinux source system-bootstrap systemtap"
 RESTRICT="mirror"
 
 REQUIRED_USE="
-	javafx? ( alsa !headless-awt )
 	!system-bootstrap? ( jbootstrap )
 "
 
@@ -103,7 +101,6 @@ DEPEND="
 	x11-libs/libXrender
 	x11-libs/libXt
 	x11-libs/libXtst
-	javafx? ( dev-java/openjfx:${SLOT}= )
 	system-bootstrap? (
 		|| (
 			dev-java/sapmachine-jdk-bin:${SLOT}
@@ -229,15 +226,6 @@ src_configure() {
 	)
 
 	use lto && myconf+=( --with-jvm-features=link-time-opt )
-
-	if use javafx; then
-		local zip="${EPREFIX}/usr/$(get_libdir)/openjfx-${SLOT}/javafx-exports.zip"
-		if [[ -r ${zip} ]]; then
-			myconf+=( --with-import-modules="${zip}" )
-		else
-			die "${zip} not found or not readable"
-		fi
-	fi
 
 	if use !system-bootstrap ; then
 		addpredict /dev/random

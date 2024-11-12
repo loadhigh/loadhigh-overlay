@@ -5,9 +5,19 @@ EAPI=8
 
 inherit check-reqs flag-o-matic java-pkg-2 java-vm-2 multiprocessing toolchain-funcs
 
+# don't change versioning scheme
+# to find correct _p number, look at
+# https://github.com/openjdk/jdk${SLOT}u/tags
+# you will see, for example, jdk-17.0.4.1-ga and jdk-17.0.4.1+1, both point
+# to exact same commit sha. we should always use the full version.
+# -ga tag is just for humans to easily identify General Availability release tag.
+# we need -ga tag to fetch tarball and unpack it, but exact number everywhere else to
+# set build version properly
+MY_PV="${PV%_p*}"
+
 # variable name format: <UPPERCASE_KEYWORD>_XPAK
-PPC64_XPAK="21.0.0_p35" # big-endian bootstrap tarball
-X86_XPAK="21.0.0_p35"
+PPC64_XPAK="11.0.13_p8" # big-endian bootstrap tarball
+X86_XPAK="11.0.13_p8"
 
 # Usage: bootstrap_uri <keyword> <version> [extracond]
 # Example: $(bootstrap_uri ppc64 17.0.1_p12 big-endian)
@@ -18,19 +28,10 @@ bootstrap_uri() {
 	local kw="${1:?${FUNCNAME[0]}: keyword not specified}"
 	local ver="${2:?${FUNCNAME[0]}: version not specified}"
 	local cond="${3-}"
-	[[ ${cond} == elibc_musl* ]] && local musl=yes
 
 	# here be dragons
-	echo "${kw}? ( ${cond:+${cond}? (} ${baseuri}-${ver}-${kw}${musl:+-musl}.${suff} ${cond:+) })"
+	echo "${kw}? ( ${cond:+${cond}? (} ${baseuri}-${ver}-${kw}.${suff} ${cond:+) })"
 }
-
-# don't change versioning scheme
-# to find correct _p number, look at
-# https://github.com/openjdk/jdk${SLOT}u/tags
-# you will see, for example, jdk-17.0.4.1-ga and jdk-17.0.4.1+1, both point
-# to exact same commit sha. we should always use the full version.
-# -ga tag is just for humans to easily identify General Availability release tag.
-MY_PV="${PV%_p*}-ga"
 
 DESCRIPTION="An OpenJDK release maintained and supported by SAP"
 HOMEPAGE="https://sap.github.io/SapMachine"
@@ -43,17 +44,15 @@ SRC_URI="
 	)
 "
 
-S="${WORKDIR}/SapMachine-sapmachine-${MY_PV%-ga}"
+S="${WORKDIR}/SapMachine-sapmachine-${MY_PV}"
 LICENSE="GPL-2-with-classpath-exception"
 SLOT="${MY_PV%%[.+]*}"
 KEYWORDS="amd64 arm64"
-IUSE="alsa big-endian cups debug doc examples headless-awt javafx +jbootstrap lto selinux source +system-bootstrap systemtap"
+IUSE="alsa big-endian cups debug doc examples headless-awt +jbootstrap lto selinux source system-bootstrap systemtap"
 RESTRICT="mirror"
 
 REQUIRED_USE="
-	javafx? ( alsa !headless-awt )
 	!system-bootstrap? ( jbootstrap )
-	!system-bootstrap? ( || ( ppc64 x86 ) )
 "
 
 COMMON_DEPEND="
@@ -99,11 +98,10 @@ DEPEND="
 	x11-libs/libXrender
 	x11-libs/libXt
 	x11-libs/libXtst
-	javafx? ( dev-java/openjfx:${SLOT}= )
 	system-bootstrap? (
 		|| (
-			dev-java/sapmachine-jdk-bin:${SLOT}
-			dev-java/sapmachine:${SLOT}
+			dev-java/sapmachine-jdk-bin:${SLOT}[gentoo-vm(+)]
+			dev-java/sapmachine:${SLOT}[gentoo-vm(+)]
 		)
 	)
 "
@@ -138,21 +136,14 @@ pkg_setup() {
 	JAVA_PKG_WANT_SOURCE="${SLOT}"
 	JAVA_PKG_WANT_TARGET="${SLOT}"
 
-	# The nastiness below is necessary while the gentoo-vm USE flag is
-	# masked. First we call java-pkg-2_pkg_setup if it looks like the
-	# flag was unmasked against one of the possible build VMs. If not,
-	# we try finding one of them in their expected locations. This would
-	# have been slightly less messy if openjdk-bin had been installed to
-	# /opt/${PN}-${SLOT} or if there was a mechanism to install a VM env
-	# file but disable it so that it would not normally be selectable.
-
-	local vm
-	for vm in ${JAVA_PKG_WANT_BUILD_VM}; do
-		if [[ -d ${BROOT}/usr/lib/jvm/${vm} ]]; then
-			java-pkg-2_pkg_setup
-			return
-		fi
-	done
+	if use system-bootstrap; then
+		for vm in ${JAVA_PKG_WANT_BUILD_VM}; do
+			if [[ -d ${BROOT}/usr/lib/jvm/${vm} ]]; then
+				java-pkg-2_pkg_setup
+				return
+			fi
+		done
+	fi
 }
 
 src_prepare() {
@@ -161,9 +152,7 @@ src_prepare() {
 }
 
 src_configure() {
-	if has_version dev-java/sapmachine:${SLOT}; then
-		export JDK_HOME=${BROOT}/usr/$(get_libdir)/sapmachine-${SLOT}
-	elif use !system-bootstrap ; then
+	if ! use system-bootstrap; then
 		local xpakvar="${ARCH^^}_XPAK"
 		export JDK_HOME="${WORKDIR}/openjdk-bootstrap-${!xpakvar}"
 	else
@@ -174,7 +163,7 @@ src_configure() {
 		export JDK_HOME
 	fi
 
-	# Work around stack alignment issue, bug #647954. in case we ever have x86
+	# Work around stack alignment issue, bug #647954.
 	use x86 && append-flags -mincoming-stack-boundary=2
 
 	# bug 906987; append-cppflags doesnt work
@@ -196,7 +185,6 @@ src_configure() {
 	local myconf=(
 		--disable-ccache
 		--disable-precompiled-headers
-		--disable-warnings-as-errors
 		--enable-full-docs=no
 		--with-boot-jdk="${JDK_HOME}"
 		--with-extra-cflags="${CFLAGS}"
@@ -215,25 +203,17 @@ src_configure() {
 		--with-vendor-vm-bug-url="https://github.com/SAP/SapMachine/issues/new"
 		--with-vendor-version-string="SapMachine"
 		--with-version-pre=""
-		--with-version-opt="LTS"
+		--with-version-opt="LTS-sapmachine"
 		--with-version-string="${PV%_p*}"
 		--with-version-build="${PR#r}"
 		--with-zlib="${XPAK_BOOTSTRAP:-system}"
-		--enable-jvm-feature-dtrace=$(usex systemtap yes no)
+		--enable-dtrace=$(usex systemtap yes no)
 		--enable-headless-only=$(usex headless-awt yes no)
 		$(tc-is-clang && echo "--with-toolchain-type=clang")
 	)
+	! use riscv && myconf+=( --with-jvm-features=shenandoahgc )
 
 	use lto && myconf+=( --with-jvm-features=link-time-opt )
-
-	if use javafx; then
-		local zip="${EPREFIX}/usr/$(get_libdir)/openjfx-${SLOT}/javafx-exports.zip"
-		if [[ -r ${zip} ]]; then
-			myconf+=( --with-import-modules="${zip}" )
-		else
-			die "${zip} not found or not readable"
-		fi
-	fi
 
 	if use !system-bootstrap ; then
 		addpredict /dev/random
@@ -309,7 +289,7 @@ src_install() {
 	if use doc ; then
 		docinto html
 		dodoc -r "${S}"/build/*-release/images/docs/*
-		dosym ../../../usr/share/doc/"${PF}" /usr/share/doc/"${PN}-${SLOT}"
+		dosym -r /usr/share/doc/"${PF}" /usr/share/doc/"${PN}-${SLOT}"
 	fi
 }
 
