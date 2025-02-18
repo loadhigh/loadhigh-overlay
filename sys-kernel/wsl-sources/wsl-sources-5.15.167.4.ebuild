@@ -1,12 +1,13 @@
 # Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
+EAPI="8"
 ETYPE="sources"
 
 K_WANT_GENPATCHES="extras"
 K_GENPATCHES_VER="177"
-K_NOSETEXTRAVERSION=1
+K_NOSETEXTRAVERSION="1"
+K_SECURITY_UNSUPPORTED="1"
 
 inherit kernel-2
 detect_version
@@ -19,13 +20,12 @@ HOMEPAGE="https://github.com/microsoft/WSL2-Linux-Kernel"
 
 KERNEL_URI="https://github.com/microsoft/WSL2-Linux-Kernel/archive/linux-msft-wsl-${MSV}.tar.gz -> linux-msft-${MSV}.tar.gz"
 SRC_URI="${KERNEL_URI} ${GENPATCHES_URI}"
-
-UNIPATCH_LIST_DEFAULT=""
-
 S="${WORKDIR}/linux-${MSV}-wsl"
 KEYWORDS="amd64 arm64"
 IUSE="experimental"
 RESTRICT="mirror"
+
+UNIPATCH_LIST_DEFAULT=""
 
 # Override universal_unpack()
 universal_unpack() {
