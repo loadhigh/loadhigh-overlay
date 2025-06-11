@@ -8,6 +8,5 @@
   <longdescription>
     Install sqlcmd and bcp the SQL Server command-line tools on Linux
   </longdescription>
-  <use>
-  </use>
+  <use/>
 </pkgmetadata>

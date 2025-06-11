@@ -11,7 +11,7 @@
 # The PMS contains specifications for all EAPIs. Eclasses will test for this
 # variable if they need to use features that are not universal in all EAPIs.
 # If an eclass doesn't support latest EAPI, use the previous EAPI instead.
-EAPI=7
+EAPI=8
 inherit rpm
 
 # inherit lists eclasses to inherit functions from. For example, an ebuild
@@ -25,7 +25,7 @@ inherit rpm
 # Short one-line description of this package.
 DESCRIPTION="Install sqlcmd and bcp the SQL Server command-line tools on Linux."
 LICENSE="all-rights-reserved"
-RESTRICT="strip"
+RESTRICT="strip mirror"
 
 # Homepage, not used by Portage directly but handy for developer reference
 HOMEPAGE="https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools?view=sql-server-ver15"
@@ -36,11 +36,13 @@ HOMEPAGE="https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tool
 MY_PV="$(ver_rs 4 '-')"
 SRC_URI="https://packages.microsoft.com/rhel/8/prod/${PN}-${MY_PV}.x86_64.rpm"
 
-SLOT="0"
-
 S=${WORKDIR}
 
+SLOT="0"
+
 KEYWORDS="~amd64"
+
+BDEPEND="app-arch/rpm2targz"
 
 RDEPEND="
 	>=dev-db/unixODBC-2.3.9 \
@@ -48,7 +50,7 @@ RDEPEND="
 "
 
 src_install() {
-	cp -r opt usr ${ED}
+	cp -r opt usr "${ED}"
 	mv "${ED}/usr/share/doc/${PN}" "${ED}/usr/share/doc/${PN}-${PV}"
 	dosym "../../opt/${PN}/bin/bcp" "/usr/bin/bcp"
 	dosym "../../opt/${PN}/bin/sqlcmd" "/usr/bin/sqlcmd"
