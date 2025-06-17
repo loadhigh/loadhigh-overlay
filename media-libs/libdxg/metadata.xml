@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pkgmetadata>
+  <maintainer type="person">
+    <email>loadhigh@users.noreply.github.com</email>
+    <name>loadhigh</name>
+  </maintainer>
+  <longdescription lang="en">
+    Microsoft's libdxg provides a Linux kernel driver for the DirectX Graphics Kernel (DXGKRNL), enabling Direct3D support on Linux systems, primarily for use with WSL (Windows Subsystem for Linux).
+  </longdescription>
+  <upstream>
+    <remote-id type="github">microsoft/libdxg</remote-id>
+  </upstream>
+</pkgmetadata>
