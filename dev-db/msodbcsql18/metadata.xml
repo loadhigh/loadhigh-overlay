@@ -6,7 +6,6 @@
     <name>loadhigh</name>
   </maintainer>
   <longdescription>
-    Install sqlcmd and bcp the SQL Server command-line tools on Linux
+    This package provides the official Microsoft binary ODBC driver for SQL Server on Linux, enabling applications to connect to Microsoft SQL Server databases using the ODBC interface.
   </longdescription>
-  <use/>
 </pkgmetadata>
