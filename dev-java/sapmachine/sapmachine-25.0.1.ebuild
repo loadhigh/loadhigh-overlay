@@ -66,7 +66,7 @@ SRC_URI="
 			$(bootstrap_uri ppc64 ${PPC64_XPAK} big-endian)
 	)
 "
-S="${WORKDIR}/${JDK_REPO}-jdk-${MY_PV//+/-}"
+S="${WORKDIR}/SapMachine-sapmachine-${MY_PV%-ga}"
 
 LICENSE="GPL-2-with-classpath-exception"
 SLOT="$(ver_cut 1)"
