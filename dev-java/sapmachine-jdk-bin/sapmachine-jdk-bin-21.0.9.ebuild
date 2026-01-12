@@ -1,4 +1,4 @@
-# Copyright 1999-2023 Gentoo Authors
+# Copyright 1999-2025 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -27,17 +27,18 @@ abi_uri() {
 }
 
 MY_PV=${PV/_p/+}
-SLOT=$(ver_cut 1)
 
+DESCRIPTION="Prebuilt Java JDK binaries provided by SAP"
+HOMEPAGE="https://sapmachine.io"
 SRC_URI="
 	$(abi_uri aarch64 arm64)
 	$(abi_uri x64 amd64)
 	$(abi_uri x64 amd64 musl)
 "
+S="${WORKDIR}/sapmachine-jdk-${MY_PV}"
 
-DESCRIPTION="Prebuilt Java JDK binaries provided by Eclipse Temurin"
-HOMEPAGE="https://adoptium.net"
 LICENSE="GPL-2-with-classpath-exception"
+SLOT=$(ver_cut 1)
 KEYWORDS="amd64 arm64"
 IUSE="alsa cups +gentoo-vm headless-awt selinux source"
 
@@ -49,7 +50,7 @@ RDEPEND="
 		media-libs/harfbuzz
 		elibc_glibc? ( >=sys-libs/glibc-2.2.5:* )
 		elibc_musl? ( sys-libs/musl )
-		sys-libs/zlib
+		virtual/zlib:=
 		alsa? ( media-libs/alsa-lib )
 		cups? ( net-print/cups )
 		selinux? ( sec-policy/selinux-java )
@@ -62,10 +63,8 @@ RDEPEND="
 		)
 	)"
 
-RESTRICT="preserve-libs splitdebug"
+RESTRICT="mirror preserve-libs splitdebug"
 QA_PREBUILT="*"
-
-S="${WORKDIR}/sapmachine-jdk-${MY_PV}"
 
 pkg_pretend() {
 	if [[ "$(tc-is-softfloat)" != "no" ]]; then
@@ -84,6 +83,9 @@ src_unpack() {
 src_install() {
 	local dest="/opt/${P}"
 	local ddest="${ED}/${dest#/}"
+
+	# https://bugs.gentoo.org/922741
+	docompress "${dest}/man"
 
 	# on macOS if they would exist they would be called .dylib, but most
 	# importantly, there are no different providers, so everything
@@ -104,7 +106,8 @@ src_install() {
 		fi
 
 		if use headless-awt ; then
-			rm -v lib/lib*{[jx]awt,splashscreen}* || die
+			# do not die if not available, -f for bug #934974
+			rm -fv lib/lib*{[jx]awt,splashscreen}* || die
 		fi
 	fi
 
