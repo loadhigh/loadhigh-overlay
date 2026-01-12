@@ -36,7 +36,6 @@ DESCRIPTION="An OpenJDK release maintained and supported by SAP"
 HOMEPAGE="https://sap.github.io/SapMachine"
 SRC_URI="
 	https://github.com/SAP/SapMachine/archive/refs/tags/sapmachine-${MY_PV%-ga}.tar.gz
-		-> ${P}.tar.gz
 	!system-bootstrap? (
 		$(bootstrap_uri ppc64 ${PPC64_XPAK} big-endian)
 		$(bootstrap_uri x86 ${X86_XPAK})
@@ -61,7 +60,7 @@ COMMON_DEPEND="
 	media-libs/harfbuzz:=
 	media-libs/libpng:0=
 	media-libs/lcms:2=
-	sys-libs/zlib
+	virtual/zlib:=
 	media-libs/libjpeg-turbo:0=
 	systemtap? ( dev-debug/systemtap )
 "
