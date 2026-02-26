@@ -1,0 +1,11 @@
+--- a/configure
++++ b/configure
+@@ -4185,7 +4185,7 @@ else
+ 	LDFLAGS_FOR_BUILD=${LDFLAGS_FOR_BUILD-""}
+ fi
+ 
+-test -z "$CFLAGS_FOR_BUILD" && CFLAGS_FOR_BUILD="-g"
++test -z "$CFLAGS_FOR_BUILD" && CFLAGS_FOR_BUILD="${CFLAGS}"
+ 
+ 
+ 

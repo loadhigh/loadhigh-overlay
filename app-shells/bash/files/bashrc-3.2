@@ -1,0 +1,26 @@
+# /etc/bash/bashrc-3.2
+# Bash 3.2 compatible system bashrc
+
+# Proceed no further in the case of a non-interactive shell.
+if [[ $- != *i* ]]; then
+	return
+fi
+
+# Disable errexit in case the user enabled it then chose to re-source this file.
+shopt -u -o errexit 2>/dev/null
+
+# Disable completion when the input buffer is empty.
+shopt -s no_empty_cmd_completion 2>/dev/null
+
+# Append to HISTFILE rather than overwrite upon exiting.
+shopt -s histappend 2>/dev/null
+
+# Source bashrc.d files (bash 3.2 compatible - using case instead of extglob)
+for _ in /etc/bash/bashrc.d/*; do
+	case "$_" in
+		*.bash|*.sh)
+			[[ -r "$_" ]] && source "$_"
+			;;
+	esac
+done
+unset _
