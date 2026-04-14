@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>loadhigh@users.noreply.github.com</email>
+		<name>loadhigh</name>
+	</maintainer>
+	<longdescription lang="en">
+		Fontconfig configuration that appends Symbols Nerd Font as a fallback
+		font for monospace, sans-serif, and serif families. This enables Nerd
+		Font icons to render automatically with any font, without needing a
+		fully patched Nerd Font variant.
+	</longdescription>
+	<upstream>
+		<remote-id type="github">ryanoasis/nerd-fonts</remote-id>
+	</upstream>
+</pkgmetadata>
