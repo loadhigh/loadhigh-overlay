@@ -8,7 +8,7 @@ HOMEPAGE="https://www.nerdfonts.com/ https://github.com/ryanoasis/nerd-fonts"
 
 S="${WORKDIR}"
 
-LICENSE="GPL-2"
+LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64"
 
@@ -17,13 +17,9 @@ RDEPEND="
 	media-libs/fontconfig
 "
 
-src_unpack() {
-	:
-}
-
 src_install() {
 	insinto /etc/fonts/conf.avail
 	doins "${FILESDIR}"/99-nerd-fonts-symbols.conf
-	dosym ../conf.avail/99-nerd-fonts-symbols.conf \
+	dosym -r /etc/fonts/conf.avail/99-nerd-fonts-symbols.conf \
 		/etc/fonts/conf.d/99-nerd-fonts-symbols.conf
 }
