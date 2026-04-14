@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>loadhigh@users.noreply.github.com</email>
+		<name>loadhigh</name>
+	</maintainer>
+	<longdescription lang="en">
+		Fontconfig configuration that adds the Windows host font directory
+		(/mnt/c/Windows/Fonts) to the font search path when running inside
+		WSL (Windows Subsystem for Linux).
+	</longdescription>
+</pkgmetadata>
