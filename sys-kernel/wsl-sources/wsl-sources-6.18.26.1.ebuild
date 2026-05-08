@@ -5,7 +5,7 @@ EAPI="8"
 ETYPE="sources"
 
 K_WANT_GENPATCHES="extras experimental"
-K_GENPATCHES_VER="22"
+K_GENPATCHES_VER="28"
 K_NOSETEXTRAVERSION=1
 K_SECURITY_UNSUPPORTED="1"
 
@@ -27,6 +27,7 @@ IUSE="experimental"
 RESTRICT="mirror"
 
 UNIPATCH_LIST_DEFAULT=""
+UNIPATCH_EXCLUDE="0000_wsl"
 
 # Override universal_unpack()
 universal_unpack() {
@@ -34,4 +35,8 @@ universal_unpack() {
 	unpack linux-msft-${MSV}.tar.gz
 	mv WSL2-Linux-Kernel-linux-msft-wsl-${MSV} linux-${MSV}-wsl || die
 	cd "${S}"
+	# Satisfy kernel-2 eclass genpatches version check;
+	# WSL source is already at target patchlevel so no base patch is needed
+	mkdir -p "${WORKDIR}/patches"
+	touch "${WORKDIR}/patches/0000_wsl-${OKV}.patch"
 }
