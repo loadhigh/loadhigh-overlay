@@ -25,6 +25,7 @@ RDEPEND="
 	dev-libs/elfutils
 	sys-process/numactl
 	sys-libs/ncurses
+	x11-libs/libdrm[video_cards_amdgpu]
 "
 
 QA_PREBUILT="*"
