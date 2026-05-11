@@ -22,7 +22,9 @@ BDEPEND="
 	>=dev-build/cmake-3.15
 	virtual/pkgconfig
 "
-RDEPEND=""
+RDEPEND="
+	dev-libs/rocm-runtime-bin
+"
 DEPEND=""
 
 # The repo ships a prebuilt libthunk_proxy.a (x86_64 only, closed-source shim).
@@ -71,7 +73,5 @@ pkg_postinst() {
 	elog "HSA_ENABLE_DXG_DETECTION=1 has been set via env.d."
 	elog "Run 'env-update && source /etc/profile' or re-login to activate."
 	elog ""
-	elog "Requires ROCm >= 7.1 runtime (libhsa-runtime64.so)."
-	elog "Install from AMD binary packages if not already present."
 	elog "Verify with: rocminfo"
 }
