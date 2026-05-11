@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>loadhigh@users.noreply.github.com</email>
+	</maintainer>
+	<upstream>
+		<remote-id type="github">ROCm/ROCR-Runtime</remote-id>
+	</upstream>
+	<longdescription>
+		Binary repackaging of AMD's ROCm HSA runtime, device libraries,
+		and rocminfo from Ubuntu .deb packages. Provides the minimal
+		runtime needed for GPU compute on WSL2 via librocdxg without
+		building the full LLVM/Clang ROCm stack from source.
+	</longdescription>
+</pkgmetadata>
