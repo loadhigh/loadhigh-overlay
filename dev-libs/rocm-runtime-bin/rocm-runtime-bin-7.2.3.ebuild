@@ -11,6 +11,7 @@ ROCM_BUILD="70203-90~24.04"
 
 SRC_URI="
 	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/h/hsa-rocr/hsa-rocr_1.18.0.${ROCM_BUILD}_amd64.deb
+	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/h/hsa-rocr-dev/hsa-rocr-dev_1.18.0.${ROCM_BUILD}_amd64.deb
 	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/r/rocm-device-libs/rocm-device-libs_1.0.0.${ROCM_BUILD}_amd64.deb
 	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/r/rocprofiler-register/rocprofiler-register_0.6.0.${ROCM_BUILD}_amd64.deb
 	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/r/rocminfo7.2.3/rocminfo7.2.3_1.0.0.${ROCM_BUILD}_amd64.deb
@@ -73,6 +74,19 @@ src_install() {
 	exeinto /opt/rocm/bin
 	doexe "${rocm}"/bin/rocminfo
 	doexe "${rocm}"/bin/rocm_agent_enumerator
+
+	# Install headers
+	insinto /opt/rocm/include
+	insopts -m0644
+	doins -r "${rocm}"/include/hsa
+	doins -r "${rocm}"/include/hsakmt
+
+	# Install cmake configs and pkg-config
+	insinto /opt/rocm/lib/cmake
+	doins -r "${rocm}"/lib/cmake/hsa-runtime64
+	doins -r "${rocm}"/lib/cmake/hsakmt
+	insinto /opt/rocm/lib/pkgconfig
+	doins "${rocm}"/lib/pkgconfig/libhsakmt.pc
 
 	# PATH and LDPATH via env.d
 	newenvd - 50rocm <<-EOF
