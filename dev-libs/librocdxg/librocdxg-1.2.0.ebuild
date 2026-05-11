@@ -22,10 +22,8 @@ BDEPEND="
 	>=dev-build/cmake-3.15
 	virtual/pkgconfig
 "
-RDEPEND="
-	>=dev-libs/rocr-runtime-7.1.0
-"
-DEPEND="${RDEPEND}"
+RDEPEND=""
+DEPEND=""
 
 # The repo ships a prebuilt libthunk_proxy.a (x86_64 only, closed-source shim).
 QA_PREBUILT="*"
@@ -63,9 +61,11 @@ src_install() {
 }
 
 pkg_postinst() {
-	elog "librocdxg is installed to /opt/rocm/lib."
+	elog "librocdxg is installed to /opt/rocm/$(get_libdir)."
 	elog "HSA_ENABLE_DXG_DETECTION=1 has been set via env.d."
 	elog "Run 'env-update && source /etc/profile' or re-login to activate."
 	elog ""
+	elog "Requires ROCm >= 7.1 runtime (libhsa-runtime64.so)."
+	elog "Install from AMD binary packages if not already present."
 	elog "Verify with: rocminfo"
 }
