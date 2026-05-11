@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>loadhigh@users.noreply.github.com</email>
+	</maintainer>
+	<upstream>
+		<remote-id type="github">ROCm/librocdxg</remote-id>
+	</upstream>
+	<longdescription>
+		librocdxg enables ROCm GPU compute on Windows Subsystem for Linux (WSL2)
+		by routing HSA runtime calls through /dev/dxg to the Windows host GPU driver.
+		Requires an AMD GPU with ROCm support and the Windows SDK headers at build time.
+	</longdescription>
+</pkgmetadata>
