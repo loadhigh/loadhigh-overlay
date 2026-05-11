@@ -40,6 +40,12 @@ pkg_pretend() {
 	fi
 }
 
+src_prepare() {
+	cmake_src_prepare
+	# Remove ldconfig call — portage runs it post-merge
+	sed -i '/execute_process.*ldconfig/d' CMakeLists.txt || die
+}
+
 src_configure() {
 	local sdk="${WIN_SDK:-${WIN_SDK_DEFAULT}}"
 	local mycmakeargs=(
