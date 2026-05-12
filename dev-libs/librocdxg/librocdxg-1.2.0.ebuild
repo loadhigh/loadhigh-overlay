@@ -23,9 +23,9 @@ BDEPEND="
 	virtual/pkgconfig
 "
 RDEPEND="
-	dev-libs/rocm-runtime-bin
+	|| ( dev-libs/rocr-runtime dev-libs/rocm-runtime-bin )
 "
-DEPEND=""
+DEPEND="${RDEPEND}"
 
 # The repo ships a prebuilt libthunk_proxy.a (x86_64 only, closed-source shim).
 QA_PREBUILT="*"
@@ -46,13 +46,15 @@ src_prepare() {
 	cmake_src_prepare
 	# Remove ldconfig call — portage runs it post-merge
 	sed -i '/execute_process.*ldconfig/d' CMakeLists.txt || die
+	# Fix hardcoded /opt/rocm/lib RPATH — we install to /usr
+	sed -i 's|/opt/rocm/lib|/usr/lib64|g' CMakeLists.txt || die
 }
 
 src_configure() {
 	local sdk="${WIN_SDK:-${WIN_SDK_DEFAULT}}"
 	local mycmakeargs=(
 		-DWIN_SDK="${sdk}/shared"
-		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/opt/rocm"
+		-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DROCM_DEP_ROCMCORE=OFF
 	)
 	cmake_src_configure
@@ -63,13 +65,12 @@ src_install() {
 
 	# env.d so HSA runtime can find librocdxg and the loader activates it
 	newenvd - 55rocm-dxg <<-EOF
-		LDPATH="/opt/rocm/$(get_libdir)"
 		HSA_ENABLE_DXG_DETECTION=1
 	EOF
 }
 
 pkg_postinst() {
-	elog "librocdxg is installed to /opt/rocm/$(get_libdir)."
+	elog "librocdxg is installed to /usr/$(get_libdir)."
 	elog "HSA_ENABLE_DXG_DETECTION=1 has been set via env.d."
 	elog "Run 'env-update && source /etc/profile' or re-login to activate."
 	elog ""

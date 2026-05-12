@@ -8,19 +8,19 @@ HOMEPAGE="https://rocm.docs.amd.com/"
 
 ROCM_V="7.2.3"
 ROCM_BUILD="70203-90~24.04"
+HSA_SO_VER="1.18.70203"
 
 SRC_URI="
 	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/h/hsa-rocr/hsa-rocr_1.18.0.${ROCM_BUILD}_amd64.deb
 	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/h/hsa-rocr-dev/hsa-rocr-dev_1.18.0.${ROCM_BUILD}_amd64.deb
-	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/r/rocm-device-libs/rocm-device-libs_1.0.0.${ROCM_BUILD}_amd64.deb
 	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/r/rocprofiler-register/rocprofiler-register_0.6.0.${ROCM_BUILD}_amd64.deb
-	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/r/rocminfo7.2.3/rocminfo7.2.3_1.0.0.${ROCM_BUILD}_amd64.deb
 "
 
 S="${WORKDIR}"
 
 LICENSE="MIT"
-SLOT="0"
+# Mirror dev-libs/rocr-runtime SLOT exactly
+SLOT="0/7.2"
 KEYWORDS="~amd64"
 
 RESTRICT="mirror strip"
@@ -28,8 +28,8 @@ RESTRICT="mirror strip"
 RDEPEND="
 	dev-libs/elfutils
 	sys-process/numactl
-	sys-libs/ncurses
 	x11-libs/libdrm[video_cards_amdgpu]
+	!dev-libs/rocr-runtime
 "
 
 QA_PREBUILT="*"
@@ -38,8 +38,7 @@ src_unpack() {
 	local f
 	for f in ${A}; do
 		einfo "Extracting ${f}"
-		ar p "${DISTDIR}/${f}" data.tar.xz 2>/dev/null | tar -xJf - -C "${S}" 2>/dev/null ||
-		ar p "${DISTDIR}/${f}" data.tar.gz 2>/dev/null | tar -xzf - -C "${S}" ||
+		ar p "${DISTDIR}/${f}" data.tar.gz | tar -xzf - -C "${S}" ||
 		die "Failed to extract ${f}"
 	done
 }
@@ -47,71 +46,48 @@ src_unpack() {
 src_install() {
 	local rocm="${S}/opt/rocm-${ROCM_V}"
 
-	# Install all shared libraries preserving symlinks
-	into /opt/rocm
-	insinto /opt/rocm/lib
-	insopts -m0755
+	# libhsa-runtime64 → /usr/lib64
+	exeinto /usr/lib64
+	doexe "${rocm}/lib/libhsa-runtime64.so.${HSA_SO_VER}"
+	dosym "libhsa-runtime64.so.${HSA_SO_VER}" "/usr/lib64/libhsa-runtime64.so.1"
+	dosym "libhsa-runtime64.so.1" "/usr/lib64/libhsa-runtime64.so"
 
-	local lib
-	for lib in "${rocm}"/lib/lib*.so.*; do
-		[[ -L "${lib}" ]] && continue
-		doins "${lib}"
-	done
-	# Recreate symlinks
-	for lib in "${rocm}"/lib/lib*.so*; do
-		[[ -L "${lib}" ]] || continue
-		dosym "$(readlink "${lib}")" "/opt/rocm/lib/${lib##*/}"
-	done
+	# rocprofiler-register runtime dep of libhsa-runtime64
+	doexe "${rocm}/lib/librocprofiler-register.so.0.6.0"
+	dosym "librocprofiler-register.so.0.6.0" "/usr/lib64/librocprofiler-register.so.0"
+	dosym "librocprofiler-register.so.0" "/usr/lib64/librocprofiler-register.so"
 
-	# Install device bitcode
-	insinto /opt/rocm/lib/llvm/lib/clang/22/lib/amdgcn/bitcode
+	# HSA headers → /usr/include/hsa
+	insinto /usr/include/hsa
 	insopts -m0644
-	doins "${rocm}"/lib/llvm/lib/clang/22/lib/amdgcn/bitcode/*.bc
+	doins "${rocm}"/include/hsa/*.h
 
-	# Symlink for amdgcn path compatibility
-	dosym lib/llvm/lib/clang/22/lib/amdgcn /opt/rocm/amdgcn
+	# hsakmt headers → /usr/include/hsakmt (needed by hip cmake)
+	insinto /usr/include/hsakmt
+	doins "${rocm}"/include/hsakmt/*.h
 
-	# Install rocminfo
-	exeinto /opt/rocm/bin
-	doexe "${rocm}"/bin/rocminfo
-	doexe "${rocm}"/bin/rocm_agent_enumerator
-
-	# Install headers
-	insinto /opt/rocm/include
+	# cmake configs — patch lib → lib64 to match Gentoo multilib layout
+	local cmake_src="${rocm}/lib/cmake/hsa-runtime64"
+	insinto /usr/lib64/cmake/hsa-runtime64
 	insopts -m0644
-	doins -r "${rocm}"/include/hsa
-	doins -r "${rocm}"/include/hsakmt
+	local f
+	for f in "${cmake_src}"/*.cmake; do
+		sed 's|/lib/libhsa|/lib64/libhsa|g' "${f}" > "${T}/${f##*/}" || die
+		doins "${T}/${f##*/}"
+	done
 
-	# Install cmake configs and pkg-config
-	insinto /opt/rocm/lib/cmake
-	doins -r "${rocm}"/lib/cmake/hsa-runtime64
-	doins -r "${rocm}"/lib/cmake/hsakmt
-	insinto /opt/rocm/lib/pkgconfig
-	doins "${rocm}"/lib/pkgconfig/libhsakmt.pc
-	# AMD doesn't ship a hsa-runtime64.pc; generate one
+	# pkg-config — generated to match rocr-runtime
 	cat > "${T}/hsa-runtime64.pc" <<-EOF
-		prefix=/opt/rocm
-		libdir=\${prefix}/lib
+		prefix=/usr
+		libdir=\${prefix}/lib64
 		includedir=\${prefix}/include
 
 		Name: hsa-runtime64
 		Description: HSA Runtime 64-bit library
-		Version: 1.18.${ROCM_BUILD%%[-~]*}
+		Version: 1.18.0
 		Libs: -L\${libdir} -lhsa-runtime64
-		Cflags: -I\${includedir}
+		Cflags: -I\${includedir}/hsa
 	EOF
+	insinto /usr/lib64/pkgconfig
 	doins "${T}/hsa-runtime64.pc"
-
-	# PATH and LDPATH via env.d
-	newenvd - 50rocm <<-EOF
-		LDPATH="/opt/rocm/lib"
-		PATH="/opt/rocm/bin"
-		PKG_CONFIG_PATH="/opt/rocm/lib/pkgconfig"
-	EOF
-}
-
-pkg_postinst() {
-	elog "ROCm ${ROCM_V} runtime installed to /opt/rocm/"
-	elog "Run 'env-update && source /etc/profile' or re-login."
-	elog "Verify with: HSA_ENABLE_DXG_DETECTION=1 rocminfo"
 }
