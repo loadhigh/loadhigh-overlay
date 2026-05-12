@@ -32,6 +32,8 @@ RDEPEND="
 	x11-libs/libdrm[video_cards_amdgpu]
 "
 
+DEPEND="${RDEPEND}"
+
 QA_PREBUILT="*"
 
 src_unpack() {
@@ -86,6 +88,11 @@ src_install() {
 	insinto /opt/rocm/lib/cmake
 	doins -r "${rocm}"/lib/cmake/hsa-runtime64
 	doins -r "${rocm}"/lib/cmake/hsakmt
+	# libhsakmt.pc from AMD is missing private deps needed when linking the static lib;
+	# patch it in place before installing
+	sed -i \
+		's|^Libs:.*|&\nRequires.private: libdrm libdrm_amdgpu numa|' \
+		"${rocm}"/lib/pkgconfig/libhsakmt.pc
 	insinto /opt/rocm/lib/pkgconfig
 	doins "${rocm}"/lib/pkgconfig/libhsakmt.pc
 	# AMD doesn't ship a hsa-runtime64.pc; generate one
