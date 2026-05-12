@@ -32,8 +32,6 @@ RDEPEND="
 	x11-libs/libdrm[video_cards_amdgpu]
 "
 
-DEPEND="${RDEPEND}"
-
 QA_PREBUILT="*"
 
 src_unpack() {
@@ -55,7 +53,7 @@ src_install() {
 	insopts -m0755
 
 	local lib
-	for lib in "${rocm}"/lib/lib*.so.* "${rocm}"/lib/lib*.a; do
+	for lib in "${rocm}"/lib/lib*.so.*; do
 		[[ -L "${lib}" ]] && continue
 		doins "${lib}"
 	done
@@ -88,26 +86,8 @@ src_install() {
 	insinto /opt/rocm/lib/cmake
 	doins -r "${rocm}"/lib/cmake/hsa-runtime64
 	doins -r "${rocm}"/lib/cmake/hsakmt
-	# libhsakmt.pc from AMD is missing private deps needed when linking the static lib;
-	# patch it in place before installing
-	sed -i \
-		's|^Libs:.*|&\nRequires.private: libdrm libdrm_amdgpu numa|' \
-		"${rocm}"/lib/pkgconfig/libhsakmt.pc
 	insinto /opt/rocm/lib/pkgconfig
 	doins "${rocm}"/lib/pkgconfig/libhsakmt.pc
-	# AMD doesn't ship a hsa-runtime64.pc; generate one
-	cat > "${T}/hsa-runtime64.pc" <<-EOF
-		prefix=/opt/rocm
-		libdir=\${prefix}/lib
-		includedir=\${prefix}/include
-
-		Name: hsa-runtime64
-		Description: HSA Runtime 64-bit library
-		Version: 1.18.${ROCM_BUILD%%[-~]*}
-		Libs: -L\${libdir} -lhsa-runtime64
-		Cflags: -I\${includedir}
-	EOF
-	doins "${T}/hsa-runtime64.pc"
 
 	# PATH and LDPATH via env.d
 	newenvd - 50rocm <<-EOF
