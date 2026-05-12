@@ -17,9 +17,12 @@ SRC_URI="
 	https://repo.radeon.com/rocm/apt/${ROCM_V}/pool/main/r/rocminfo7.2.3/rocminfo7.2.3_1.0.0.${ROCM_BUILD}_amd64.deb
 "
 
+S="${WORKDIR}"
+
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64"
+
 RESTRICT="mirror strip"
 
 RDEPEND="
@@ -31,14 +34,12 @@ RDEPEND="
 
 QA_PREBUILT="*"
 
-S="${WORKDIR}"
-
 src_unpack() {
 	local f
 	for f in ${A}; do
 		einfo "Extracting ${f}"
-		ar p "${DISTDIR}/${f}" data.tar.xz 2>/dev/null | tar xJ -C "${S}" 2>/dev/null ||
-		ar p "${DISTDIR}/${f}" data.tar.gz 2>/dev/null | tar xz -C "${S}" ||
+		ar p "${DISTDIR}/${f}" data.tar.xz 2>/dev/null | tar -xJf - -C "${S}" 2>/dev/null ||
+		ar p "${DISTDIR}/${f}" data.tar.gz 2>/dev/null | tar -xzf - -C "${S}" ||
 		die "Failed to extract ${f}"
 	done
 }
@@ -92,6 +93,7 @@ src_install() {
 	newenvd - 50rocm <<-EOF
 		LDPATH="/opt/rocm/lib"
 		PATH="/opt/rocm/bin"
+		PKG_CONFIG_PATH="/opt/rocm/lib/pkgconfig"
 	EOF
 }
 
