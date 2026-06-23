@@ -5,4 +5,11 @@
     <email>loadhigh@users.noreply.github.com</email>
     <name>loadhigh</name>
   </maintainer>
+  <longdescription>
+    Microsoft Hyper-V Linux guest userspace daemons: hv_kvp_daemon (Key/Value
+    Pair exchange), hv_vss_daemon (Volume Shadow Copy), and the file-copy daemon
+    (hv_fcopy_daemon on Linux &lt;6.10, hv_fcopy_uio_daemon on &gt;=6.10).
+    Built directly from tools/hv/ in the already-installed kernel source tree
+    (via virtual/linux-sources), so no kernel tarball needs to be downloaded.
+  </longdescription>
 </pkgmetadata>
