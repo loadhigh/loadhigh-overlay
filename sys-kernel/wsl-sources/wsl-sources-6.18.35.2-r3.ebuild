@@ -36,15 +36,6 @@ inherit kernel-2
 detect_version
 detect_arch
 
-# detect_version derives KV_FULL from CKV, and we set CKV=${PV%.*}=${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}
-# so that ${KERNEL_URI}/${GENPATCHES_URI} resolve to real mirror files. That
-# drops the Microsoft trailing revision (the ".2" in 6.18.35.2), which we want
-# to keep so /usr/src/linux-${KV_FULL} makes the Microsoft revision visible.
-KV_FULL="${PV}-${PN/-*}"
-[[ -n ${PR//r0} ]] && KV_FULL="${KV_FULL}-${PR}"
-KV="${KV_FULL}"
-S="${WORKDIR}/linux-${KV_FULL}"
-
 # Commit SHA of tag v${CKV} in kernel.org's linux-stable tree.
 # Reproduce with:
 #   git ls-remote https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git \
@@ -62,8 +53,23 @@ HOMEPAGE="https://github.com/microsoft/WSL2-Linux-Kernel"
 SRC_URI="${KERNEL_URI} ${GENPATCHES_URI}
 	https://github.com/microsoft/WSL2-Linux-Kernel/compare/${UPSTREAM_SHA}...linux-msft-wsl-${MSV}.diff -> ${WSL_DIFF}"
 
+# detect_version derives KV_FULL from CKV, and we set CKV=${PV%.*}=${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}
+# so that ${KERNEL_URI}/${GENPATCHES_URI} resolve to real mirror files. That
+# drops the Microsoft trailing revision (the ".2" in 6.18.35.2), which we want
+# to keep so /usr/src/linux-${KV_FULL} makes the Microsoft revision visible.
+KV_FULL="${PV}-${PN/-*}"
+[[ -n ${PR//r0} ]] && KV_FULL="${KV_FULL}-${PR}"
+KV="${KV_FULL}"
+S="${WORKDIR}/linux-${KV_FULL}"
+
 KEYWORDS="~amd64 ~arm64"
 IUSE="experimental"
+
+# Only the WSL delta URL (github.com compare API) is off-mirror; the
+# kernel.org and distfiles.gentoo.org URIs are already served by the Gentoo /
+# kernel.org mirror hosts.  RESTRICT="mirror" tells Gentoo's mirror robots not
+# to try to archive our distfiles (the github one cannot be archived anyway).
+RESTRICT="mirror"
 
 # Application order (via kernel-2's unipatch phase; see line 1455 of the eclass):
 #   1. UNIPATCH_LIST_DEFAULT     -> (unused)
