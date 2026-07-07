@@ -36,6 +36,15 @@ inherit kernel-2
 detect_version
 detect_arch
 
+# detect_version derives KV_FULL from CKV, and we set CKV=${PV%.*}=${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}
+# so that ${KERNEL_URI}/${GENPATCHES_URI} resolve to real mirror files. That
+# drops the Microsoft trailing revision (the ".2" in 6.18.35.2), which we want
+# to keep so /usr/src/linux-${KV_FULL} makes the Microsoft revision visible.
+KV_FULL="${PV}-${PN/-*}"
+[[ -n ${PR//r0} ]] && KV_FULL="${KV_FULL}-${PR}"
+KV="${KV_FULL}"
+S="${WORKDIR}/linux-${KV_FULL}"
+
 # Commit SHA of tag v${CKV} in kernel.org's linux-stable tree.
 # Reproduce with:
 #   git ls-remote https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git \
