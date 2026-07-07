@@ -80,13 +80,16 @@ UNIPATCH_LIST="${DISTDIR}/${WSL_DIFF}"
 
 pkg_postinst() {
 	kernel-2_pkg_postinst
-	einfo ""
-	einfo "wsl-sources-${PV} = gentoo-sources at v${CKV} + Microsoft's WSL delta"
-	einfo "  WSL upstream: https://github.com/microsoft/WSL2-Linux-Kernel/tree/linux-msft-wsl-${MSV}"
-	einfo "  Reproduce:    linux-${KV_MAJOR}.${KV_MINOR}.tar.xz"
-	einfo "              + genpatches-${KV_MAJOR}.${KV_MINOR}-${K_GENPATCHES_VER}.{base,extras,experimental}.tar.xz"
-	einfo "              + ${WSL_DIFF}"
-	einfo ""
+	# elog (not einfo): einfo is not captured by PORTAGE_ELOG_SYSTEM, so it
+	# would scroll off the terminal during the merge and never make it into
+	# /var/log/portage/elog/summary.log or the end-of-emerge summary block.
+	elog ""
+	elog "wsl-sources-${PV} = gentoo-sources at v${CKV} + Microsoft's WSL delta"
+	elog "  WSL upstream: https://github.com/microsoft/WSL2-Linux-Kernel/tree/linux-msft-wsl-${MSV}"
+	elog "  Reproduce:    linux-${KV_MAJOR}.${KV_MINOR}.tar.xz"
+	elog "              + genpatches-${KV_MAJOR}.${KV_MINOR}-${K_GENPATCHES_VER}.{base,extras,experimental}.tar.xz"
+	elog "              + ${WSL_DIFF}"
+	elog ""
 }
 
 pkg_postrm() {
