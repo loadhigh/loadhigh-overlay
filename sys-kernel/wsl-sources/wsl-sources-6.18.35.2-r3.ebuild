@@ -23,7 +23,7 @@ K_SECURITY_UNSUPPORTED="1"
 # + genpatches-${KV_MAJOR}.${KV_MINOR}-${K_GENPATCHES_VER}.base.tar.xz
 #                                                 (Gentoo stable + baseline, ~2 MB)
 # + genpatches ...extras / ...experimental        (Gentoo patchset, small)
-# + wsl-${MSV}.diff                               (v${CKV}..linux-msft-wsl-${MSV},
+# + linux-msft-wsl-${MSV}.diff                    (v${CKV}..linux-msft-wsl-${MSV},
 #                                                  ~1 MB, served by GitHub compare)
 #
 # Every distfile above is a Gentoo/kernel.org mirror-friendly file except
@@ -51,7 +51,7 @@ S="${WORKDIR}/linux-${KV_FULL}"
 #     "refs/tags/v${CKV}^{}" | awk '{print $1}'
 UPSTREAM_SHA="acb7cf4c1184e27622be0faf89244d5001ed1e87"
 
-WSL_DIFF="wsl-${MSV}.diff"
+WSL_DIFF="linux-msft-wsl-${MSV}.diff"
 
 DESCRIPTION="Linux kernel for WSL2 (gentoo-sources at v${CKV} + Microsoft WSL delta)"
 HOMEPAGE="https://github.com/microsoft/WSL2-Linux-Kernel"
